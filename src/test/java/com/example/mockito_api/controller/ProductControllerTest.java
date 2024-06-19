@@ -2,12 +2,16 @@ package com.example.mockito_api.controller;
 
 import com.example.mockito_api.entity.Product;
 import com.example.mockito_api.service.ProductService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -15,6 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
 public class ProductControllerTest {
@@ -24,6 +29,13 @@ public class ProductControllerTest {
 
     @InjectMocks
     ProductController controller;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new ProductController()).build();
+    }
 
     @Test
     void testAddProduct() {
@@ -45,7 +57,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void testGetAllProducts() {
+    void testGetAllProducts() throws Exception {
 
         // Expected values
         ArrayList<Product> expectedProducts = new ArrayList<>();
