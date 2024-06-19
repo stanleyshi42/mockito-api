@@ -86,6 +86,7 @@ public class ProductControllerTest {
     }
 
     @Test
+        // Deleting an ID that doesn't exist
     void testGetProductWithInvalidId() {
 
         when(service.getProductById(any(Integer.class))).thenReturn(Optional.empty());
@@ -132,6 +133,7 @@ public class ProductControllerTest {
     }
 
     @Test
+        // Deleting an ID that doesn't exist
     void testDeleteProductWithInvalidId() {
 
         when(service.getProductById(any(Integer.class))).thenReturn(Optional.empty());
