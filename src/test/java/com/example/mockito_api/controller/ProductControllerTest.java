@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -68,6 +69,9 @@ public class ProductControllerTest {
         when(service.getAllProducts()).thenReturn(expectedProducts);
 
         // Execute method and perform assertions
+//        MvcResult result = mockMvc.perform(get("/product")).andReturn();
+//        String x = result.getResponse().getContentAsString();
+
         ArrayList<Product> actualProducts = (ArrayList<Product>) controller.getAllProducts();
         assertEquals(3, actualProducts.size());
 
