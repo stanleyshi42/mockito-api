@@ -63,7 +63,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void testProductById() {
+    void testGetProductById() {
 
         // Expected values
         int expectedId = 1;
@@ -86,6 +86,18 @@ public class ProductControllerTest {
     }
 
     @Test
+    void testGetProductWithInvalidId() {
+
+        when(service.getProductById(any(Integer.class))).thenReturn(Optional.empty());
+
+        ResponseEntity<Object> response = controller.getProductById(1);
+        assertEquals(404, response.getStatusCode().value());
+        assertNull(response.getBody());
+
+        verify(service, times(1)).getProductById(any(Integer.class));
+    }
+
+    @Test
     void testUpdateProduct() {
 
         // Expected values
@@ -100,6 +112,34 @@ public class ProductControllerTest {
         assertEquals(201, response.getStatusCode().value());
 
         verify(service, times(1)).updateProduct(any(Product.class));
+    }
+
+    @Test
+    void testDeleteProductById() {
+
+        int expectedId = 1;
+        String expectedName = "Laptop";
+        double expectedPrice = 599.99;
+        Product expectedProduct = new Product(expectedId, expectedName, expectedPrice);
+
+        when(service.getProductById(expectedId)).thenReturn(Optional.of(expectedProduct));
+
+        ResponseEntity<Object> response = controller.deleteProductById(expectedId);
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("Product deleted", response.getBody());
+
+        verify(service).getProductById(expectedId);
+    }
+
+    @Test
+    void testDeleteProductWithInvalidId() {
+
+        when(service.getProductById(any(Integer.class))).thenReturn(Optional.empty());
+
+        ResponseEntity<Object> response = controller.deleteProductById(1);
+        assertEquals(404, response.getStatusCode().value());
+
+        verify(service).getProductById(any(Integer.class));
     }
 
 }
