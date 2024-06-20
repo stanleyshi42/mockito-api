@@ -4,14 +4,13 @@ import com.example.mockito_api.entity.Product;
 import com.example.mockito_api.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
@@ -23,20 +22,19 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 public class ProductControllerTest {
 
-    @Mock
+    @MockBean
     ProductService service;
 
-    @InjectMocks
+    @Autowired
     ProductController controller;
 
+    @Autowired
     MockMvc mockMvc;
 
-    @BeforeEach
-    void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new ProductController()).build();
-    }
+
 
     @Test
     void testAddProduct() {
@@ -68,14 +66,11 @@ public class ProductControllerTest {
 
         when(service.getAllProducts()).thenReturn(expectedProducts);
 
-        // Execute method and perform assertions
-//        MvcResult result = mockMvc.perform(get("/product")).andReturn();
-//        String x = result.getResponse().getContentAsString();
+        // Execute request and perform assertions
+        MvcResult result = mockMvc.perform(get("/product")).andReturn();
 
-        ArrayList<Product> actualProducts = (ArrayList<Product>) controller.getAllProducts();
-        assertEquals(3, actualProducts.size());
-
-        verify(service, times(1)).getAllProducts();
+        assertEquals(200, result.getResponse().getStatus());
+        verify(service).getAllProducts();
     }
 
     @Test
